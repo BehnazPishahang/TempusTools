@@ -1,6 +1,4 @@
-This is a take home test designed for back-end interview candidates.
-
-This requires **Visual Studio 2022 version 17.8+** and git
+This Project requires **Visual Studio 2022 version 17.8+** and git
 
 To run the project, git clone the project and open it in Visual Studio.
 
@@ -30,3 +28,5 @@ These endpoints should use a service to complete the required action and the ser
 The Get endpoint is already completed.
 
 Unit tests have been added to assert expected behaviors.
+
+Once you have finished please create a pull request merging into the master branch.
