@@ -33,7 +33,7 @@ namespace UnitTests
 
             var weatherForecastService = new WeatherForecastService(context);
 
-            var result = await weatherForecastService.GetAllWeatherForcasts();
+            var result = await weatherForecastService.GetAllWeatherForecasts();
 
             Assert.IsNotNull(result);
             Assert.That(result.Count, Is.EqualTo(1));
@@ -77,7 +77,7 @@ namespace UnitTests
 
             var weatherForecastService = new WeatherForecastService(context);
 
-            var result = await weatherForecastService.GetAllWeatherForcasts();
+            var result = await weatherForecastService.GetAllWeatherForecasts();
 
             Assert.IsNotNull(result);
             Assert.That(result.Count, Is.EqualTo(3));
@@ -99,7 +99,7 @@ namespace UnitTests
 
             var weatherForecastService = new WeatherForecastService(context);
 
-            var result = await weatherForecastService.GetAllWeatherForcasts();
+            var result = await weatherForecastService.GetAllWeatherForecasts();
 
             Assert.IsNotNull(result);
             Assert.That(result.Count, Is.EqualTo(0));
@@ -130,7 +130,7 @@ namespace UnitTests
 
             var weatherForecastService = new WeatherForecastService(context);
 
-            var result = await weatherForecastService.UpdateWeatherForcast(
+            var result = await weatherForecastService.UpdateWeatherForecast(
                 new WeatherForecast
                 {
                     Id = id,
@@ -180,7 +180,7 @@ namespace UnitTests
 
             var weatherForecastService = new WeatherForecastService(context);
 
-            var result = await weatherForecastService.UpdateWeatherForcast(
+            var result = await weatherForecastService.UpdateWeatherForecast(
                 new WeatherForecast
                 {
                     Id = id,
@@ -216,7 +216,7 @@ namespace UnitTests
 
             var weatherForecastService = new WeatherForecastService(context);
 
-            var result = await weatherForecastService.UpdateWeatherForcast(
+            var result = await weatherForecastService.UpdateWeatherForecast(
                 new WeatherForecast
                 {
                     Id = id,
@@ -266,7 +266,7 @@ namespace UnitTests
                 Summary = "Test"
             };
 
-            var result = await weatherForecastService.CreateWeatherForcast(
+            var result = await weatherForecastService.CreateWeatherForecast(
                 newWeatherForecast
             );
 
@@ -297,7 +297,7 @@ namespace UnitTests
                 Date = DateOnly.FromDateTime(DateTime.Today),
             };
 
-            var result = await weatherForecastService.CreateWeatherForcast(
+            var result = await weatherForecastService.CreateWeatherForecast(
                 newForecast
             );;
 
@@ -340,7 +340,7 @@ namespace UnitTests
 
             var weatherForecastService = new WeatherForecastService(context);
 
-            var result = await weatherForecastService.DeleteWeatherForcast(id);
+            var result = await weatherForecastService.DeleteWeatherForecast(id);
 
             Assert.IsTrue(result);
 
@@ -362,7 +362,7 @@ namespace UnitTests
 
             var weatherForecastService = new WeatherForecastService(context);
 
-            var result = await weatherForecastService.DeleteWeatherForcast(id);
+            var result = await weatherForecastService.DeleteWeatherForecast(id);
 
             Assert.IsFalse(result);
 
