@@ -9,18 +9,18 @@ namespace TakeHomeTest.Server.Controllers
     {
 
         private readonly ILogger<WeatherForecastController> _logger;
-        private readonly IWeatherForcastService _weatherForcastService;
+        private readonly IWeatherForecastService _weatherForcastService;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IWeatherForcastService weatherForcastService)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IWeatherForecastService weatherForecastService)
         {
             _logger = logger;
-            _weatherForcastService = weatherForcastService;
+            _weatherForcastService = weatherForecastService;
         }
 
         [HttpGet()]
         public async Task<IEnumerable<WeatherForecast>> Get()
         {
-            return await _weatherForcastService.GetAllWeatherForcasts();
+            return await _weatherForcastService.GetAllWeatherForecasts();
         }
 
         [HttpPost("Update")]

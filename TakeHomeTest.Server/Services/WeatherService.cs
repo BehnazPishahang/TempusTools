@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TakeHomeTest.Server.Services
 {
-    public class WeatherForecastService : IWeatherForcastService
+    public class WeatherForecastService : IWeatherForecastService
     {
         private readonly DatabaseContext _context;
         public WeatherForecastService(
@@ -25,21 +25,21 @@ namespace TakeHomeTest.Server.Services
 
         }
 
-        public async Task<ICollection<WeatherForecast>> GetAllWeatherForcasts()
+        public async Task<ICollection<WeatherForecast>> GetAllWeatherForecasts()
         {
             return await _context.WeatherForecast.ToListAsync();
         }
-        public async Task<WeatherForecast> UpdateWeatherForcast(WeatherForecast weatherForcast)
+        public async Task<WeatherForecast> UpdateWeatherForecast(WeatherForecast weatherForecast)
         {
             //TODO Implement updating a weatherForcast in the database
             return null;
         }
-        public async Task<bool> DeleteWeatherForcast(Guid Id)
+        public async Task<bool> DeleteWeatherForecast(Guid Id)
         {
-            //TODO implement deleting a weatherForcast from database
+            //TODO implement deleting a weatherForcast from the database
             return false;
         }
-        public async Task<WeatherForecast> CreateWeatherForcast(WeatherForecast weatherForcast)
+        public async Task<WeatherForecast> CreateWeatherForecast(WeatherForecast weatherForecast)
         {
             //TODO implement inserting weatherForcast into database
             return null;

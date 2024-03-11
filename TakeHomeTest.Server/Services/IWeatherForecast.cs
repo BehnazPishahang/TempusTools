@@ -2,12 +2,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TakeHomeTest.Server
 {
-    public interface IWeatherForcastService
+    public interface IWeatherForecastService
     {
         static string GetSummary(int temperatureC) { return ""; }
-        Task<ICollection<WeatherForecast>> GetAllWeatherForcasts();
-        Task<WeatherForecast> UpdateWeatherForcast(WeatherForecast weatherForcast);
-        Task<bool> DeleteWeatherForcast(Guid Id);
-        Task<WeatherForecast> CreateWeatherForcast(WeatherForecast weatherForcast);
+        Task<ICollection<WeatherForecast>> GetAllWeatherForecasts();
+        Task<WeatherForecast> UpdateWeatherForecast(WeatherForecast weatherForecast);
+        Task<bool> DeleteWeatherForecast(Guid Id);
+        Task<WeatherForecast> CreateWeatherForecast(WeatherForecast weatherForecast);
     }
 }

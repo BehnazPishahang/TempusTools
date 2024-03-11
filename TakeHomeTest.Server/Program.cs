@@ -21,7 +21,7 @@ var DbPath = System.IO.Path.Join(path, "database.db");
 
 builder.Services.AddDbContext<DatabaseContext>( options => options.UseSqlite($"Data Source={DbPath}"));
 // Add WeatherForcastService
-builder.Services.AddTransient<IWeatherForcastService, WeatherForecastService>();
+builder.Services.AddTransient<IWeatherForecastService, WeatherForecastService>();
 
 var app = builder.Build();
 
