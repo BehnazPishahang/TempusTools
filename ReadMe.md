@@ -1,9 +1,11 @@
 This Project requires **Visual Studio 2022 version 17.8+** and git.
 
+To get started please fork the repository and follow the instructions below.
+
 
 # Task Instructions
 
-To run the project, git clone the project and open it in Visual Studio.
+Open the project in Visual Studio.
 
 In the package manager console run the following commands: 
 
@@ -60,7 +62,7 @@ Here is some documentation related to Entity Framework to get started:
 * [Entity Framework Migrations](https://learn.microsoft.com/en-us/aspnet/core/data/ef-rp/migrations?view=aspnetcore-8.0&tabs=visual-studio)
 * [Linq query basics](https://learn.microsoft.com/en-us/dotnet/csharp/linq/standard-query-operators/)
 
-***Once you have finished the task please create a pull request merging into the master branch.***
+***Once you have finished the task please create a pull request to this repository from your fork.***
 
 # Troubleshooting
 
