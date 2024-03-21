@@ -30,6 +30,7 @@ namespace UnitTests
             });
             
             context.SaveChanges();
+            context.ChangeTracker.Clear();
 
             var weatherForecastService = new WeatherForecastService(context);
 
@@ -74,6 +75,7 @@ namespace UnitTests
             });
 
             context.SaveChanges();
+            context.ChangeTracker.Clear();
 
             var weatherForecastService = new WeatherForecastService(context);
 
@@ -127,6 +129,7 @@ namespace UnitTests
             });
 
             context.SaveChanges();
+            context.ChangeTracker.Clear();
 
             var weatherForecastService = new WeatherForecastService(context);
 
@@ -177,6 +180,7 @@ namespace UnitTests
             });
 
             context.SaveChanges();
+            context.ChangeTracker.Clear();
 
             var weatherForecastService = new WeatherForecastService(context);
 
@@ -254,6 +258,7 @@ namespace UnitTests
             });
 
             context.SaveChanges();
+            context.ChangeTracker.Clear();
 
             var weatherForecastService = new WeatherForecastService(context);
 
@@ -337,6 +342,7 @@ namespace UnitTests
             });
 
             context.SaveChanges();
+            context.ChangeTracker.Clear();
 
             var weatherForecastService = new WeatherForecastService(context);
 
