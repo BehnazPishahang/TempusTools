@@ -152,19 +152,20 @@ function App() {
     }
 
     function getInputData() {
-        var idInput = document.getElementById("idinput");
-        var dateinput = document.getElementById("dateinput");
-        var tempcinput = document.getElementById("tempcinput");
-        var tempfinput = document.getElementById("tempfinput");
-        var summaryinput = document.getElementById("summaryinput");
+        var idInput = document.getElementById("idinput").value;
+        var dateinput = document.getElementById("dateinput").value;
+        var tempcinput = document.getElementById("tempcinput").value;
+        var tempfinput = document.getElementById("tempfinput").value;
+        var summaryinput = document.getElementById("summaryinput").value;
         var data =
         {
-            id: idInput.value,
-            date: dateinput.value,
-            temperatureC: Number(tempcinput.value),
-            temperatureF: Number(tempfinput.value),
-            summary: summaryinput.value
+            id: idInput ? idInput : null,
+            date: dateinput,
+            temperatureC: Number(tempcinput),
+            temperatureF: Number(tempfinput),
+            summary: summaryinput
         };
+
         return data;
     }
 
