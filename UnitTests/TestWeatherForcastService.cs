@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using TakeHomeTest.Server;
+using TakeHomeTest.Server.Domain;
 using TakeHomeTest.Server.Services;
 
 namespace UnitTests
@@ -25,10 +26,10 @@ namespace UnitTests
             {
                 Date = DateOnly.FromDateTime(DateTime.Today),
                 TemperatureC = 32,
-                TemperatureF = (int) (32 * 1.8 + 32),
+                TemperatureF = (int)(32 * 1.8 + 32),
                 Summary = "Test"
             });
-            
+
             context.SaveChanges();
 
             var weatherForecastService = new WeatherForecastService(context);
@@ -87,7 +88,7 @@ namespace UnitTests
             Assert.That(results.ElementAt(2).Summary, Is.EqualTo("Test3"));
 
         }
-        
+
         [Test]
         public async Task WeatherForecastService_GetAllWeatherForcasts_NoResults()
         {
@@ -104,7 +105,153 @@ namespace UnitTests
             Assert.IsNotNull(result);
             Assert.That(result.Count, Is.EqualTo(0));
         }
+
+        [Test]
+        public async Task WeatherForecastService_GetWeatherForecastByLocationName_ExistingOneLocationName()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<DatabaseContext>()
+               .UseInMemoryDatabase(databaseName: TestContext.CurrentContext.Test.Name)
+               .Options;
+            using var context = new DatabaseContext(options);
+
+            var locationName = "TestLocation";
+            var locationId = Guid.NewGuid();
+            context.Location.Add(new Location { Id = locationId, Name = locationName });
+
+            context.WeatherForecast.Add(new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Today),
+                TemperatureC = 32,
+                TemperatureF = (int)(32 * 1.8 + 32),
+                Summary = "Test",
+                LocationId = locationId
+            });
+
+            context.SaveChanges();
+            context.ChangeTracker.Clear();
+
+            var weatherForecastService = new WeatherForecastService(context);
+
+            // Act
+            var result = await weatherForecastService.GetWeatherForecastByLocationName(locationName);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Count);
+            Assert.IsNotNull(result.First().Location); // Ensure the Location property is not null
+            Assert.AreEqual(locationName, result.First().Location.Name);
+        }
+
+        [Test]
+        public async Task WeatherForecastService_GetWeatherForecastByLocationName_MultipleForecastsWithSameLocationName()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<DatabaseContext>()
+               .UseInMemoryDatabase(databaseName: TestContext.CurrentContext.Test.Name)
+               .Options;
+            using var context = new DatabaseContext(options);
+
+            var locationName = "TestLocation";
+            var locationId = Guid.NewGuid();
+            context.Location.Add(new Location { Id = locationId, Name = locationName });
+
+            context.WeatherForecast.Add(new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Today),
+                TemperatureC = 32,
+                TemperatureF = (int)(32 * 1.8 + 32),
+                Summary = "Test1",
+                LocationId = locationId
+            });
+
+            context.WeatherForecast.Add(new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Today),
+                TemperatureC = 25,
+                TemperatureF = (int)(25 * 1.8 + 32),
+                Summary = "Test2",
+                LocationId = locationId
+            });
+
+            context.SaveChanges();
+            context.ChangeTracker.Clear();
+
+            var weatherForecastService = new WeatherForecastService(context);
+
+            // Act
+            var result = await weatherForecastService.GetWeatherForecastByLocationName(locationName);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Count);
+
+            foreach (var weatherForecast in result)
+            {
+                Assert.IsNotNull(weatherForecast.Location); // Ensure the Location property is not null
+                Assert.AreEqual(locationName, weatherForecast.Location.Name);
+            }
+        }
+
+        [Test]
+        public async Task WeatherForecastService_GetWeatherForecastByLocationName_NoResultsforForecasts()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<DatabaseContext>()
+               .UseInMemoryDatabase(databaseName: TestContext.CurrentContext.Test.Name)
+               .Options;
+            using var context = new DatabaseContext(options);
+
+            var locationName = "NonExistingLocation";
+
+            var weatherForecastService = new WeatherForecastService(context);
+
+            // Act
+            var result = await weatherForecastService.GetWeatherForecastByLocationName(locationName);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsEmpty(result);
+        }
+
+        [Test]
+        public async Task WeatherForecastService_GetWeatherForecastByLocationName_NoResultsforLocation()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<DatabaseContext>()
+               .UseInMemoryDatabase(databaseName: TestContext.CurrentContext.Test.Name)
+               .Options;
+            using var context = new DatabaseContext(options);
+
+            var locationName = "Location 1";
+            var locationId = Guid.NewGuid();
+            context.Location.Add(new Location { Id = locationId, Name = locationName });
+
+            context.WeatherForecast.Add(new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Today),
+                TemperatureC = 32,
+                TemperatureF = (int)(32 * 1.8 + 32),
+                Summary = "Test",
+                LocationId = locationId
+
+            });
+
+            context.SaveChanges();
+            context.ChangeTracker.Clear();
+
+            var weatherForecastService = new WeatherForecastService(context);
+
+            // Act
+            var result = await weatherForecastService.GetWeatherForecastByLocationName("NonExistingLocation");
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsEmpty(result);
+        }
         #endregion
+
+
 
         #region Update tests
         [Test]
@@ -116,6 +263,9 @@ namespace UnitTests
             using var context = new DatabaseContext(options);
 
             var id = Guid.NewGuid();
+            var locationName = "TestLocation";
+            var locationId = Guid.NewGuid();
+            context.Location.Add(new Location { Id = locationId, Name = locationName });
 
             context.WeatherForecast.Add(new WeatherForecast
             {
@@ -123,7 +273,10 @@ namespace UnitTests
                 Date = DateOnly.FromDateTime(DateTime.Today),
                 TemperatureC = 32,
                 TemperatureF = (int)(32 * 1.8 + 32),
-                Summary = "Test"
+                Summary = "Test",
+                LocationId=locationId,
+                IsTemperatureCSet = true,
+                IsTemperatureFSet = true
             });
 
             context.SaveChanges();
@@ -137,7 +290,9 @@ namespace UnitTests
                     Date = DateOnly.FromDateTime(DateTime.Today.AddDays(1)),
                     TemperatureC = 20,
                     TemperatureF = 10,
-                    Summary = "Test2"
+                    Summary = "Test2",
+                    IsTemperatureCSet=true,
+                    IsTemperatureFSet=true
                 }
             );
 
@@ -166,14 +321,20 @@ namespace UnitTests
             using var context = new DatabaseContext(options);
 
             var id = Guid.NewGuid();
-
+            var locationName = "TestLocation";
+            var locationId = Guid.NewGuid();
+            context.Location.Add(new Location { Id = locationId, Name = locationName });
+            
             context.WeatherForecast.Add(new WeatherForecast
             {
                 Id = id,
                 Date = DateOnly.FromDateTime(DateTime.Today),
                 TemperatureC = 32,
                 TemperatureF = (int)(32 * 1.8 + 32),
-                Summary = "Test"
+                Summary = "Test",
+                LocationId=locationId,
+                IsTemperatureCSet = true,
+                IsTemperatureFSet = true
             });
 
             context.SaveChanges();
@@ -185,6 +346,7 @@ namespace UnitTests
                 {
                     Id = id,
                     TemperatureF = 10,
+                    IsTemperatureFSet = true
                 }
             );
 
@@ -243,6 +405,9 @@ namespace UnitTests
             using var context = new DatabaseContext(options);
 
             var id = Guid.NewGuid();
+            var locationName = "TestLocation";
+            var locationId = Guid.NewGuid();
+            context.Location.Add(new Location { Id = locationId, Name = locationName });
 
             context.WeatherForecast.Add(new WeatherForecast
             {
@@ -250,7 +415,8 @@ namespace UnitTests
                 Date = DateOnly.FromDateTime(DateTime.Today),
                 TemperatureC = 32,
                 TemperatureF = (int)(32 * 1.8 + 32),
-                Summary = "Test"
+                Summary = "Test",
+                LocationId=locationId
             });
 
             context.SaveChanges();
@@ -263,7 +429,8 @@ namespace UnitTests
                 Date = DateOnly.FromDateTime(DateTime.Today),
                 TemperatureC = 5,
                 TemperatureF = 5,
-                Summary = "Test"
+                Summary = "Test",
+                LocationId = locationId
             };
 
             var result = await weatherForecastService.CreateWeatherForecast(
@@ -285,6 +452,9 @@ namespace UnitTests
             using var context = new DatabaseContext(options);
 
             var id = Guid.NewGuid();
+            var locationName = "TestLocation";
+            var locationId = Guid.NewGuid();
+            context.Location.Add(new Location { Id = locationId, Name = locationName });
 
             var weatherForecastService = new WeatherForecastService(context);
 
@@ -295,12 +465,12 @@ namespace UnitTests
                 TemperatureC = 10,
                 Summary = "test",
                 Date = DateOnly.FromDateTime(DateTime.Today),
+                LocationId = locationId
             };
 
             var result = await weatherForecastService.CreateWeatherForecast(
                 newForecast
-            );;
-
+            ); ;
             Assert.IsNotNull(result);
 
             var dbResults = context.WeatherForecast.Where(wf => wf.Id == id).ToList();
